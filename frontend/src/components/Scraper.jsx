@@ -1,4 +1,3 @@
-// Scraper.jsx
 import { useState } from "react";
 import { scrapeSite, analyzeData, getSuggestions } from "../services/api";
 import AnalysisComponent from "./AnalysisComponent";
@@ -14,6 +13,7 @@ function Scraper() {
   const [suggestions, setSuggestions] = useState([]);
   const [urlError, setUrlError] = useState(null);
 
+  // Fetch suggestions after scraping data
   const fetchSuggestions = async (scrapedData) => {
     try {
       const suggestionsResponse = await getSuggestions(scrapedData);
@@ -31,16 +31,18 @@ function Scraper() {
   // URL validation function
   const isValidUrl = (url) => {
     const urlPattern = new RegExp(
-      "^(https?://)?" + // Protocol (optional)
-        "(([a-zA-Z0-9-]+.)+[a-zA-Z]{2,})" + // Domain name and TLD
-        "(:[0-9]{1,5})?" + // Port (optional)
-        "(/.*)?$", // Path (optional)
+      "^(https?://)?" + 
+        "(([a-zA-Z0-9-]+.)+[a-zA-Z]{2,})" + 
+        "(:[0-9]{1,5})?" + 
+        "(/.*)?$", 
       "i"
     );
     return urlPattern.test(url);
   };
 
+  // Handle scrape action
   const handleScrape = async () => {
+    // Validate URL input
     if (!url.trim()) {
       setUrlError("Please enter a URL");
       return;
@@ -55,15 +57,19 @@ function Scraper() {
     setSuggestions([]);
 
     try {
+      // Scrape the site
       const response = await scrapeSite(url);
       const scrapedData = response.data.data;
       setData(scrapedData);
 
+      // Analyze the scraped data
       const analysisResponse = await analyzeData(scrapedData);
       setAnalysisResult(analysisResponse.data);
 
+      // Fetch suggestions
       fetchSuggestions(scrapedData);
     } catch (error) {
+      // Handle errors gracefully
       setData(
         `Error: ${
           error.response
@@ -96,9 +102,7 @@ function Scraper() {
         {/* Right: Card with URL input and Scrape Button */}
         <div className="w-[45%]">
           <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl shadow-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-200 ease-out">
-            <h2 className="text-2xl font-bold mb-4 text-white">
-              Scrape a Site
-            </h2>
+            <h2 className="text-2xl font-bold mb-4 text-white">Scrape a Site</h2>
             <input
               type="search"
               value={url}
@@ -106,9 +110,7 @@ function Scraper() {
               placeholder="Enter URL here"
               className="w-full p-2 mb-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-900 text-white placeholder-gray-500"
             />
-            {urlError && (
-              <p className="text-red-500 text-sm mt-1">{urlError}</p>
-            )}
+            {urlError && <p className="text-red-500 text-sm mt-1">{urlError}</p>}
             <button
               onClick={handleScrape}
               className="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 w-full transition-colors duration-200 ease-in-out mt-2"
@@ -119,7 +121,7 @@ function Scraper() {
         </div>
       </div>
 
-      {/* Display scraped data and sentiment analysis */}
+      {/* Display scraped data, sentiment analysis, and suggestions */}
       <div className="flex flex-col items-center space-y-4 pb-8 w-[90%]">
         {/* Scraped Data Section */}
         <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl shadow-lg w-full max-w-3xl p-6 transform hover:scale-105 transition-transform duration-200 ease-out">
@@ -167,3 +169,4 @@ function Scraper() {
 }
 
 export default Scraper;
+
