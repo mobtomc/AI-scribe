@@ -10,4 +10,4 @@ flask-cors
 requests
 bs4
 transformers
-pytorch
+torch
