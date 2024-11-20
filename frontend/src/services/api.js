@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const scrapeSite = (url) =>
-  axios.post("http://127.0.0.1:8000/scrape/", { url });
+  axios.post("https://ai-scribe.onrender.com/scrape/", { url });
 
 export const analyzeData = (data) =>
-  axios.post("http://127.0.0.1:8000/analyze/", { data });
+  axios.post("https://ai-scribe.onrender.com/analyze/", { data });
 
 export const getSuggestions = (data) =>
-  axios.post("http://127.0.0.1:8000/suggestions/", { data });
+  axios.post("https://ai-scribe.onrender.com/suggestions/", { data });
 
 export const searchCompetitors = async (businessType, location) => {
   const options = {
